@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Roommate Preferences - Hostel Management System{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-clipboard-list"></i> Roommate Preference Questionnaire
+                    </h3>
+                    <p class="mb-0 mt-2">Help us find your perfect roommate match!</p>
+                </div>
+                <div class="card-body p-4">
+                    <form id="preferencesForm">
+                        <!-- Sleep Habits Section -->
+                        <div class="section-header mb-3">
+                            <h5 class="text-primary"><i class="fas fa-moon"></i> Sleep Habits</h5>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="sleepTime" class="form-label">Preferred Sleep Time</label>
+                                <select class="form-select" id="sleepTime" name="sleep_time" required>
+                                    <option value="">Select time</option>
+                                    <option value="early evening">Early Evening (8-9 PM)</option>
+                                    <option value="evening">Evening (9-10 PM)</option>
+                                    <option value="late evening">Late Evening (10-11 PM)</option>
+                                    <option value="night">Night (11 PM-12 AM)</option>
+                                    <option value="late night">Late Night (12-1 AM)</option>
+                                    <option value="midnight">After Midnight (1+ AM)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="wakeTime" class="form-label">Preferred Wake Time</label>
+                                <select class="form-select" id="wakeTime" name="wake_time" required>
+                                    <option value="">Select time</option>
+                                    <option value="early morning">Early Morning (5-6 AM)</option>
+                                    <option value="morning">Morning (6-7 AM)</option>
+                                    <option value="late morning">Late Morning (7-8 AM)</option>
+                                    <option value="noon">Late Morning (8-9 AM)</option>
+                                    <option value="afternoon">Mid Morning (9-10 AM)</option>
+                                    <option value="late afternoon">After 10 AM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Study Habits Section -->
+                        <div class="section-header mb-3 mt-4">
+                            <h5 class="text-primary"><i class="fas fa-book"></i> Study Habits</h5>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="studyPreference" class="form-label">Study Preference</label>
+                            <select class="form-select" id="studyPreference" name="study_preference" required>
+                                <option value="">Select preference</option>
+                                <option value="group">Group Study (prefer studying with others)</option>
+                                <option value="individual">Individual Study (prefer studying alone)</option>
+                                <option value="mixed">Mixed (both group and individual)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="noiseTolerance" class="form-label">Noise Tolerance While Studying</label>
+                            <select class="form-select" id="noiseTolerance" name="noise_tolerance" required>
+                                <option value="">Select tolerance</option>
+                                <option value="low">Low (need complete silence)</option>
+                                <option value="medium">Medium (can handle some noise)</option>
+                                <option value="high">High (can study with background noise)</option>
+                            </select>
+                        </div>
+
+                        <!-- Personal Habits Section -->
+                        <div class="section-header mb-3 mt-4">
+                            <h5 class="text-primary"><i class="fas fa-user"></i> Personal Habits</h5>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cleanliness" class="form-label">Cleanliness Level</label>
+                            <select class="form-select" id="cleanliness" name="cleanliness_level" required>
+                                <option value="">Select level</option>
+                                <option value="low">Relaxed (occasional mess is okay)</option>
+                                <option value="medium">Moderate (generally clean)</option>
+                                <option value="high">High (very organized and clean)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="smokingPreference" class="form-label">Smoking Preference</label>
+                            <select class="form-select" id="smokingPreference" name="smoking_preference" required>
+                                <option value="">Select preference</option>
+                                <option value="non-smoker">Non-smoker (no smoking)</option>
+                                <option value="smoker">Smoker (smoking is okay)</option>
+                                <option value="occasional">Occasional (social smoking only)</option>
+                            </select>
+                        </div>
+
+                        <!-- Social Preferences Section -->
+                        <div class="section-header mb-3 mt-4">
+                            <h5 class="text-primary"><i class="fas fa-users"></i> Social Preferences</h5>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="socialPreference" class="form-label">Social Personality</label>
+                            <select class="form-select" id="socialPreference" name="social_preference" required>
+                                <option value="">Select type</option>
+                                <option value="extrovert">Extrovert (love socializing and parties)</option>
+                                <option value="introvert">Introvert (prefer quiet and alone time)</option>
+                                <option value="ambivert">Ambivert (balanced social interaction)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="visitorFrequency" class="form-label">Frequency of Visitors/Guests</label>
+                            <select class="form-select" id="visitorFrequency" name="visitor_frequency" required>
+                                <option value="">Select frequency</option>
+                                <option value="rarely">Rarely (almost never have guests)</option>
+                                <option value="occasionally">Occasionally (few times a month)</option>
+                                <option value="frequently">Frequently (multiple times a week)</option>
+                            </select>
+                        </div>
+
+                        <!-- Entertainment & Lifestyle Section -->
+                        <div class="section-header mb-3 mt-4">
+                            <h5 class="text-primary"><i class="fas fa-music"></i> Entertainment & Lifestyle</h5>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="musicPreference" class="form-label">Music Listening Habits</label>
+                            <select class="form-select" id="musicPreference" name="music_preference" required>
+                                <option value="">Select habit</option>
+                                <option value="headphones">Always use headphones</option>
+                                <option value="low volume">Play at low volume</option>
+                                <option value="loud">Enjoy loud music</option>
+                                <option value="no music">Prefer silence</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="temperaturePreference" class="form-label">Room Temperature Preference</label>
+                            <select class="form-select" id="temperaturePreference" name="temperature_preference" required>
+                                <option value="">Select preference</option>
+                                <option value="cool">Cool (AC/fan frequently)</option>
+                                <option value="moderate">Moderate (balanced temperature)</option>
+                                <option value="warm">Warm (minimal AC/fan)</option>
+                            </select>
+                        </div>
+
+                        <!-- Dietary & Lifestyle Section -->
+                        <div class="section-header mb-3 mt-4">
+                            <h5 class="text-primary"><i class="fas fa-utensils"></i> Dietary & Other Preferences</h5>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="dietaryPreferences" class="form-label">Dietary Preferences</label>
+                            <select class="form-select" id="dietaryPreferences" name="dietary_preferences">
+                                <option value="">Select preference</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="non-vegetarian">Non-Vegetarian</option>
+                                <option value="vegan">Vegan</option>
+                                <option value="no preference">No Preference</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="interests" class="form-label">Interests & Hobbies</label>
+                            <input type="text" class="form-control" id="interests" name="interests" 
+                                   placeholder="e.g., sports, reading, gaming, music, movies (separate by commas)">
+                            <div class="form-text">This helps us match you with like-minded roommates</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="additionalNotes" class="form-label">Additional Notes (Optional)</label>
+                            <textarea class="form-control" id="additionalNotes" name="additional_notes" rows="3" 
+                                      placeholder="Any specific requirements or preferences you'd like to mention..."></textarea>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> Save Preferences
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('preferencesForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+        const response = await fetch('/api/preferences', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('Preferences saved successfully! You will be notified once room allocation is complete.', 'success');
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 2000);
+        } else {
+            showAlert(result.message, 'danger');
+        }
+    } catch (error) {
+        showAlert('Failed to save preferences. Please try again.', 'danger');
+    }
+});
+</script>
+
+<style>
+.section-header {
+    border-left: 4px solid var(--bs-primary);
+    padding-left: 15px;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.form-select:focus,
+.form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+</style>
+{% endblock %}

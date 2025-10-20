@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Hostel Management System{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-primary mb-4">
+                    Smart Hostel Management System
+                </h1>
+                <p class="lead mb-4">
+                    Experience seamless hostel life with our intelligent roommate matching system. 
+                    Find your perfect roommate based on compatibility and preferences.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    {% if not session.student_id and not session.admin_id %}
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus"></i> Register Now
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-sign-in-alt"></i> Student Login
+                    </a>
+                    {% elif session.student_id %}
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </a>
+                    {% elif session.admin_id %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-cogs"></i> Admin Dashboard
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <img src="{{ url_for('static', filename='images/image-65.webp') }}" 
+                         alt="Hostel Management System" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold">Why Choose Our System?</h2>
+                <p class="lead">Advanced features for better hostel living experience</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-users fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Smart Roommate Matching</h4>
+                        <p class="card-text">
+                            Our advanced algorithm matches you with compatible roommates based on 
+                            lifestyle preferences, study habits, and personality traits.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-clipboard-list fa-3x text-success"></i>
+                        </div>
+                        <h4 class="card-title">Comprehensive Questionnaire</h4>
+                        <p class="card-text">
+                            Fill out a detailed questionnaire about your preferences including 
+                            sleep schedule, study habits, cleanliness, and social preferences.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-line fa-3x text-info"></i>
+                        </div>
+                        <h4 class="card-title">Compatibility Scoring</h4>
+                        <p class="card-text">
+                            Get matched with roommates based on compatibility scores calculated 
+                            from your preferences to ensure harmonious living.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-6 fw-bold mb-4">How It Works</h2>
+                <div class="steps">
+                    <div class="step-item d-flex mb-3">
+                        <div class="step-number me-3">
+                            <span class="badge bg-primary rounded-circle">1</span>
+                        </div>
+                        <div>
+                            <h5>Register & Create Profile</h5>
+                            <p class="text-muted">Sign up with your student details and create your profile.</p>
+                        </div>
+                    </div>
+                    <div class="step-item d-flex mb-3">
+                        <div class="step-number me-3">
+                            <span class="badge bg-primary rounded-circle">2</span>
+                        </div>
+                        <div>
+                            <h5>Complete Preference Questionnaire</h5>
+                            <p class="text-muted">Answer questions about your lifestyle and roommate preferences.</p>
+                        </div>
+                    </div>
+                    <div class="step-item d-flex mb-3">
+                        <div class="step-number me-3">
+                            <span class="badge bg-primary rounded-circle">3</span>
+                        </div>
+                        <div>
+                            <h5>Get Matched & Allocated</h5>
+                            <p class="text-muted">Our algorithm finds compatible roommates and assigns rooms.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="stat-card bg-primary text-white p-4 rounded">
+                            <h3 class="display-6 fw-bold">95%</h3>
+                            <p class="mb-0">Compatibility Rate</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card bg-success text-white p-4 rounded">
+                            <h3 class="display-6 fw-bold">500+</h3>
+                            <p class="mb-0">Happy Students</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card bg-info text-white p-4 rounded">
+                            <h3 class="display-6 fw-bold">50+</h3>
+                            <p class="mb-0">Available Rooms</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card bg-warning text-white p-4 rounded">
+                            <h3 class="display-6 fw-bold">24/7</h3>
+                            <p class="mb-0">Support</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
