@@ -40,6 +40,7 @@ public class Student {
     
     private String course;
     
+    @Column(name = "study_year")
     private Integer year;
     
     private String gender;

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -25,9 +26,23 @@ public class SecurityConfig {
             .cors().and()
             .csrf().disable()
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/register", "/api/login", "/api/admin_login").permitAll()
-                .requestMatchers("/", "/register", "/login", "/admin").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/h2-console/**").permitAll()
+                .requestMatchers(
+                    new AntPathRequestMatcher("/api/register"),
+                    new AntPathRequestMatcher("/api/login"), 
+                    new AntPathRequestMatcher("/api/admin_login")
+                ).permitAll()
+                .requestMatchers(
+                    new AntPathRequestMatcher("/"),
+                    new AntPathRequestMatcher("/register"),
+                    new AntPathRequestMatcher("/login"),
+                    new AntPathRequestMatcher("/admin")
+                ).permitAll()
+                .requestMatchers(
+                    new AntPathRequestMatcher("/css/**"),
+                    new AntPathRequestMatcher("/js/**"),
+                    new AntPathRequestMatcher("/images/**"),
+                    new AntPathRequestMatcher("/h2-console/**")
+                ).permitAll()
                 .anyRequest().permitAll()  // Allow all for development
             )
             .headers(headers -> headers.frameOptions().disable()) // For H2 console
