@@ -197,32 +197,7 @@ public class StudentController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-    
-    /**
-     * Get all students (admin only)
-     */
-    @GetMapping("/students")
-    public ResponseEntity<Map<String, Object>> getAllStudents(HttpSession session) {
-        Map<String, Object> response = new HashMap<>();
-        
-        try {
-            // Check admin session (simplified for now)
-            Long adminId = (Long) session.getAttribute("admin_id");
-            if (adminId == null) {
-                response.put("success", false);
-                response.put("message", "Admin access required");
-                return ResponseEntity.badRequest().body(response);
-            }
-            
-            response.put("students", studentRepository.findAll());
-            return ResponseEntity.ok(response);
-            
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "Failed to fetch students: " + e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
+
     
     /**
      * Logout endpoint (POST)
