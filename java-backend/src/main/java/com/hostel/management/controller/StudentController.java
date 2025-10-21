@@ -226,7 +226,7 @@ public class StudentController {
     }
     
     /**
-     * Logout endpoint
+     * Logout endpoint (POST)
      */
     @PostMapping("/logout")
     public ResponseEntity<Map<String, Object>> logout(HttpSession session) {
@@ -237,5 +237,14 @@ public class StudentController {
         response.put("success", true);
         response.put("message", "Logged out successfully");
         return ResponseEntity.ok(response);
+    }
+    
+    /**
+     * Logout endpoint (GET) - for direct navigation
+     */
+    @GetMapping("/logout")
+    public String logoutGet(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
 }

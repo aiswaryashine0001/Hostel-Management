@@ -29,6 +29,6 @@ public class WebConfig implements WebMvcConfigurer {
     
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/logout").setViewName("redirect:/");
+        // View controllers can be added here if needed
     }
 }
