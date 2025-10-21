@@ -193,46 +193,30 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Room Allocation System</h5>
-                    <button class="btn btn-success" onclick="runAllocation()">
-                        <i class="fas fa-magic"></i> Run Smart Allocation
+                    <button class="btn btn-primary" onclick="refreshAllocations()">
+                        <i class="fas fa-sync"></i> Refresh Allocations
                     </button>
                 </div>
                 <div class="card-body">
-                    <div id="allocationResults" class="mb-4" style="display: none;">
-                        <div class="alert alert-info">
-                            <h6><i class="fas fa-info-circle"></i> Allocation Results</h6>
-                            <div id="allocationResultsContent"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <h6 class="card-title">Allocation Algorithm</h6>
-                                    <p class="card-text small">
-                                        Our smart allocation system considers:
-                                    </p>
-                                    <ul class="small">
-                                        <li>Sleep and wake time compatibility</li>
-                                        <li>Study habits and noise tolerance</li>
-                                        <li>Cleanliness and social preferences</li>
-                                        <li>Temperature and lifestyle compatibility</li>
-                                        <li>Shared interests and hobbies</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card bg-light">
-                                <div class="card-body">
-                                    <h6 class="card-title">Allocation Status</h6>
-                                    <p id="allocationStatus" class="card-text">
-                                        Ready to run allocation algorithm
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="allocationsTable">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Course</th>
+                                    <th>Room</th>
+                                    <th>Compatibility Score</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allocationsTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center">Loading allocations...</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -319,6 +303,11 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDashboardStats();
     refreshStudents();
     refreshRooms();
+    
+    // Add event listener for allocations tab
+    document.getElementById('allocations-tab').addEventListener('click', function() {
+        setTimeout(() => refreshAllocations(), 100);
+    });
 });
 
 async function loadDashboardStats() {
@@ -477,41 +466,44 @@ async function addRoom() {
     }
 }
 
-async function runAllocation() {
-    const button = event.target;
-    const originalText = button.innerHTML;
-    
-    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running Allocation...';
-    button.disabled = true;
+async function refreshAllocations() {
+    const tbody = document.getElementById('allocationsTableBody');
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading allocations...</td></tr>';
     
     try {
-        const response = await fetch('/api/allocate_rooms', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        
+        const response = await fetch('/api/allocations');
         const result = await response.json();
         
-        if (result.success) {
-            if (result.results) {
-                showAllocationResults(result.results);
-            }
-            showAlert(result.message, 'success');
-            refreshStudents();
-            loadDashboardStats();
+        if (result.success && result.allocations) {
+            populateAllocationsTable(result.allocations);
         } else {
-            showAlert(result.message || 'Allocation failed', 'danger');
-            console.error('Allocation failed:', result);
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No allocations found</td></tr>';
         }
     } catch (error) {
-        console.error('Allocation error:', error);
-        showAlert('Error running allocation: ' + error.message, 'danger');
-    } finally {
-        button.innerHTML = originalText;
-        button.disabled = false;
+        console.error('Error loading allocations:', error);
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Error loading allocations</td></tr>';
     }
+}
+
+function populateAllocationsTable(allocations) {
+    const tbody = document.getElementById('allocationsTableBody');
+    
+    if (allocations.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No allocations available</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = allocations.map(allocation => `
+        <tr>
+            <td>${allocation.studentId}</td>
+            <td>${allocation.studentName}</td>
+            <td>${allocation.email}</td>
+            <td>${allocation.course || 'N/A'}</td>
+            <td><span class="badge bg-info">${allocation.roomNumber}</span></td>
+            <td><span class="badge bg-success">${allocation.compatibilityScore}%</span></td>
+            <td><span class="badge bg-success">${allocation.status}</span></td>
+        </tr>
+    `).join('');
 }
 
 function showAllocationResults(results) {
