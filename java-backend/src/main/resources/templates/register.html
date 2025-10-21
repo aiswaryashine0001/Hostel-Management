@@ -192,6 +192,9 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         
         if (result.success) {
             showAlert('Registration successful! Please login.', 'success');
+            // Clear the form
+            this.reset();
+            // Redirect to login after 2 seconds
             setTimeout(() => {
                 window.location.href = '/login';
             }, 2000);
