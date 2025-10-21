@@ -101,6 +101,17 @@ public class AdminController {
     }
     
     /**
+     * Simple test endpoint
+     */
+    @GetMapping("/test")
+    public ResponseEntity<Map<String, Object>> test() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "API is working!");
+        response.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * Database health check endpoint
      */
     @GetMapping("/health")
