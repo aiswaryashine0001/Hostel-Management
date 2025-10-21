@@ -55,15 +55,6 @@
                     
                     <!-- Alert for messages -->
                     <div id="alertContainer"></div>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <h2 class="card-title">Student Registration</h2>
-                        <p class="text-muted">Create your account to get started</p>
-                    </div>
                     
                     <form id="registerForm">
                         <div class="mb-3">
@@ -143,7 +134,7 @@
                     
                     <div class="text-center mt-3">
                         <p class="mb-0">Already have an account? 
-                            <a href="{{ url_for('login') }}" class="text-decoration-none">Login here</a>
+                            <a th:href="@{/login}" class="text-decoration-none">Login here</a>
                         </p>
                     </div>
                 </div>
@@ -151,9 +142,12 @@
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script th:src="@{/js/utils.js}"></script>
+
 <script>
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -194,4 +188,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     }
 });
 </script>
-{% endblock %}
+
+</body>
+</html>
