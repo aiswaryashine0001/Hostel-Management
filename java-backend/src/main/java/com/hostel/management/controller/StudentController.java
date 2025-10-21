@@ -185,10 +185,14 @@ public class StudentController {
             preferences.setInterests(request.get("interests"));
             preferences.setAdditionalNotes(request.get("additional_notes"));
             
-            preferencesRepository.save(preferences);
+            // Save preferences and ensure bidirectional link is set on the student
+            StudentPreferences saved = preferencesRepository.save(preferences);
+            student.setPreferences(saved);
+            studentRepository.save(student);
             
             response.put("success", true);
             response.put("message", "Preferences saved successfully");
+            response.put("preferences_id", saved.getId());
             return ResponseEntity.ok(response);
             
         } catch (Exception e) {

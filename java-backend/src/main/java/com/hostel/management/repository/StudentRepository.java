@@ -38,8 +38,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      * Find students with preferences but no room allocation
      */
     @Query("SELECT s FROM Student s " +
-           "JOIN s.preferences p " +
-           "WHERE s.roomAllocation IS NULL")
+        "WHERE EXISTS (SELECT p FROM StudentPreferences p WHERE p.student = s) " +
+        "AND s.roomAllocation IS NULL")
     List<Student> findStudentsWithPreferencesButNoAllocation();
     
     /**
