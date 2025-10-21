@@ -495,15 +495,19 @@ async function runAllocation() {
         const result = await response.json();
         
         if (result.success) {
-            showAllocationResults(result.results);
+            if (result.results) {
+                showAllocationResults(result.results);
+            }
             showAlert(result.message, 'success');
             refreshStudents();
             loadDashboardStats();
         } else {
-            showAlert(result.message, 'danger');
+            showAlert(result.message || 'Allocation failed', 'danger');
+            console.error('Allocation failed:', result);
         }
     } catch (error) {
-        showAlert('Error running allocation', 'danger');
+        console.error('Allocation error:', error);
+        showAlert('Error running allocation: ' + error.message, 'danger');
     } finally {
         button.innerHTML = originalText;
         button.disabled = false;
@@ -514,11 +518,17 @@ function showAllocationResults(results) {
     const resultsDiv = document.getElementById('allocationResults');
     const contentDiv = document.getElementById('allocationResultsContent');
     
+    if (!results) {
+        contentDiv.innerHTML = '<p>No allocation results available</p>';
+        resultsDiv.style.display = 'block';
+        return;
+    }
+    
     let html = `
         <p><strong>Allocation Summary:</strong></p>
         <ul>
-            <li>Students Allocated: ${results.allocated_count}</li>
-            <li>Total Students: ${results.total_students}</li>
+            <li>Students Allocated: ${results.allocated_count || 0}</li>
+            <li>Total Students: ${results.total_students || 0}</li>
         </ul>
     `;
     
