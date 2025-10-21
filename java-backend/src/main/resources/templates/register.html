@@ -152,8 +152,12 @@
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
+    console.log('Form submitted'); // Debug
+    
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
+    
+    console.log('Form data:', data); // Debug
     
     // Validate passwords match
     if (data.password !== data.confirm_password) {
@@ -164,7 +168,15 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     // Remove confirm_password from data
     delete data.confirm_password;
     
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+    submitBtn.disabled = true;
+    
     try {
+        console.log('Sending request to /api/register'); // Debug
+        
         const response = await fetch('/api/register', {
             method: 'POST',
             headers: {
@@ -173,7 +185,10 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             body: JSON.stringify(data)
         });
         
+        console.log('Response status:', response.status); // Debug
+        
         const result = await response.json();
+        console.log('Response data:', result); // Debug
         
         if (result.success) {
             showAlert('Registration successful! Please login.', 'success');
@@ -181,11 +196,23 @@ document.getElementById('registerForm').addEventListener('submit', async functio
                 window.location.href = '/login';
             }, 2000);
         } else {
-            showAlert(result.message, 'danger');
+            showAlert(result.message || 'Registration failed', 'danger');
         }
     } catch (error) {
-        showAlert('Registration failed. Please try again.', 'danger');
+        console.error('Registration error:', error); // Debug
+        showAlert('Registration failed. Please try again. Error: ' + error.message, 'danger');
+    } finally {
+        // Restore button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
     }
+});
+
+// Add form validation
+document.querySelectorAll('#registerForm input[required]').forEach(input => {
+    input.addEventListener('invalid', function() {
+        showAlert('Please fill in all required fields', 'warning');
+    });
 });
 </script>
 
