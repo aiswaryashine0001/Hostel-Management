@@ -2,8 +2,10 @@ package com.hostel.management.config;
 
 import com.hostel.management.entity.Admin;
 import com.hostel.management.entity.Room;
+import com.hostel.management.entity.Student;
 import com.hostel.management.repository.AdminRepository;
 import com.hostel.management.repository.RoomRepository;
+import com.hostel.management.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +22,9 @@ public class DataInitializer implements CommandLineRunner {
     
     @Autowired
     private RoomRepository roomRepository;
+    
+    @Autowired
+    private StudentRepository studentRepository;
     
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
@@ -40,6 +45,10 @@ public class DataInitializer implements CommandLineRunner {
             createSampleRooms();
             System.out.println("Sample rooms created successfully");
         }
+        
+        // Show count of registered students
+        long studentCount = studentRepository.count();
+        System.out.println("Current registered students in database: " + studentCount);
     }
     
     private void createSampleRooms() {

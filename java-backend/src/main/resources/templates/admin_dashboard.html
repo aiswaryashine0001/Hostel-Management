@@ -338,19 +338,19 @@ async function refreshStudents() {
         if (data.students && data.students.length > 0) {
             tbody.innerHTML = data.students.map(student => `
                 <tr>
-                    <td>${student.student_id}</td>
+                    <td>${student.studentId}</td>
                     <td>${student.name}</td>
                     <td>${student.course || 'N/A'}</td>
                     <td>${student.year || 'N/A'}</td>
                     <td>
-                        ${student.sleep_time ? 
+                        ${student.preferences ? 
                             '<span class="badge bg-success">Completed</span>' : 
                             '<span class="badge bg-warning">Pending</span>'
                         }
                     </td>
                     <td>
-                        ${student.room_number ? 
-                            `<span class="badge bg-info">${student.room_number}</span>` : 
+                        ${student.roomAllocation && student.roomAllocation.room ? 
+                            `<span class="badge bg-info">${student.roomAllocation.room.roomNumber}</span>` : 
                             '<span class="badge bg-secondary">Unallocated</span>'
                         }
                     </td>
@@ -363,7 +363,7 @@ async function refreshStudents() {
             `).join('');
         } else {
             console.log('No students found in response');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">No students found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No students registered yet. Students will appear here after they register through the registration form.</td></tr>';
         }
     } catch (error) {
         console.error('Error loading students:', error);
