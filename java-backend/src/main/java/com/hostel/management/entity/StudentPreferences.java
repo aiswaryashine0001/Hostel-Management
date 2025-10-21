@@ -1,5 +1,6 @@
 package com.hostel.management.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,6 +19,7 @@ public class StudentPreferences {
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
+    @JsonBackReference
     private Student student;
     
     @Column(name = "sleep_time")

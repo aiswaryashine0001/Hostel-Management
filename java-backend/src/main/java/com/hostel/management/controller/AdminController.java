@@ -1,5 +1,6 @@
 package com.hostel.management.controller;
 
+import com.hostel.management.dto.StudentDto;
 import com.hostel.management.entity.Admin;
 import com.hostel.management.entity.Room;
 import com.hostel.management.entity.Student;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST API Controller for admin operations
@@ -158,13 +161,18 @@ public class AdminController {
             //     return ResponseEntity.badRequest().body(response);
             // }
             
-            var students = studentRepository.findAll();
+            List<Student> students = studentRepository.findAll();
             System.out.println("Found " + students.size() + " registered students in database");
             
-            response.put("students", students);
+            // Convert to DTOs to avoid circular reference issues
+            List<StudentDto> studentDtos = students.stream()
+                .map(StudentDto::new)
+                .collect(Collectors.toList());
+            
+            response.put("students", studentDtos);
             response.put("success", true);
-            response.put("count", students.size());
-            response.put("message", "Found " + students.size() + " registered students");
+            response.put("count", studentDtos.size());
+            response.put("message", "Found " + studentDtos.size() + " registered students");
             
             System.out.println("Returning response with " + students.size() + " students");
             return ResponseEntity.ok(response);
