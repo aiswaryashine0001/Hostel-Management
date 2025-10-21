@@ -181,7 +181,6 @@ public class StudentController {
             preferences.setMusicPreference(request.get("music_preference"));
             preferences.setVisitorFrequency(request.get("visitor_frequency"));
             preferences.setTemperaturePreference(request.get("temperature_preference"));
-            preferences.setSmokingPreference(request.get("smoking_preference"));
             preferences.setDietaryPreferences(request.get("dietary_preferences"));
             preferences.setInterests(request.get("interests"));
             preferences.setAdditionalNotes(request.get("additional_notes"));

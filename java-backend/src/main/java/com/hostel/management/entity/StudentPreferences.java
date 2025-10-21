@@ -47,9 +47,6 @@ public class StudentPreferences {
     @Column(name = "temperature_preference")
     private String temperaturePreference;
     
-    @Column(name = "smoking_preference")
-    private String smokingPreference;
-    
     @Column(name = "dietary_preferences")
     private String dietaryPreferences;
     
@@ -158,14 +155,6 @@ public class StudentPreferences {
     
     public void setTemperaturePreference(String temperaturePreference) {
         this.temperaturePreference = temperaturePreference;
-    }
-    
-    public String getSmokingPreference() {
-        return smokingPreference;
-    }
-    
-    public void setSmokingPreference(String smokingPreference) {
-        this.smokingPreference = smokingPreference;
     }
     
     public String getDietaryPreferences() {

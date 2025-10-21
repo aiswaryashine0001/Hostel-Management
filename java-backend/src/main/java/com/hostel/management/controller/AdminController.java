@@ -2,8 +2,10 @@ package com.hostel.management.controller;
 
 import com.hostel.management.entity.Admin;
 import com.hostel.management.entity.Room;
+import com.hostel.management.entity.Student;
 import com.hostel.management.repository.AdminRepository;
 import com.hostel.management.repository.RoomRepository;
+import com.hostel.management.repository.StudentRepository;
 import com.hostel.management.service.RoomAllocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,9 @@ public class AdminController {
     
     @Autowired
     private RoomRepository roomRepository;
+    
+    @Autowired
+    private StudentRepository studentRepository;
     
     @Autowired
     private RoomAllocationService allocationService;
@@ -91,6 +96,32 @@ public class AdminController {
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", "Failed to fetch rooms: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+    
+    /**
+     * Get all students endpoint (for admin)
+     */
+    @GetMapping("/students")
+    public ResponseEntity<Map<String, Object>> getAllStudents(HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            // Check admin access
+            Long adminId = (Long) session.getAttribute("admin_id");
+            if (adminId == null) {
+                response.put("success", false);
+                response.put("message", "Admin access required");
+                return ResponseEntity.badRequest().body(response);
+            }
+            
+            response.put("students", studentRepository.findAll());
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Failed to fetch students: " + e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
     }

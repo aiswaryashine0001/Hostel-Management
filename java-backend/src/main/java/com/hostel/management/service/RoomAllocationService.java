@@ -39,8 +39,7 @@ public class RoomAllocationService {
         "socialPreference", 0.10,
         "musicPreference", 0.08,
         "visitorFrequency", 0.08,
-        "temperaturePreference", 0.05,
-        "smokingPreference", 0.15  // High weight for smoking compatibility
+        "temperaturePreference", 0.20  // Increased weight to compensate for removing smoking
     );
     
     private static final double MINIMUM_COMPATIBILITY_SCORE = 60.0;
@@ -228,13 +227,6 @@ public class RoomAllocationService {
             double score = calculateCategoricalCompatibility(prefs1.getTemperaturePreference(), prefs2.getTemperaturePreference());
             totalScore += score * PREFERENCE_WEIGHTS.get("temperaturePreference");
             totalWeight += PREFERENCE_WEIGHTS.get("temperaturePreference");
-        }
-        
-        // Smoking preference compatibility (high importance)
-        if (prefs1.getSmokingPreference() != null && prefs2.getSmokingPreference() != null) {
-            double score = prefs1.getSmokingPreference().equalsIgnoreCase(prefs2.getSmokingPreference()) ? 1.0 : 0.0;
-            totalScore += score * PREFERENCE_WEIGHTS.get("smokingPreference");
-            totalWeight += PREFERENCE_WEIGHTS.get("smokingPreference");
         }
         
         // Interests compatibility bonus

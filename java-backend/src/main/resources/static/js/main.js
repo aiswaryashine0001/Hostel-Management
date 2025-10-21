@@ -180,11 +180,6 @@ function getPreferenceDisplayText(key, value) {
             'extrovert': 'Extrovert',
             'introvert': 'Introvert',
             'ambivert': 'Ambivert'
-        },
-        smoking_preference: {
-            'non-smoker': 'Non-smoker',
-            'smoker': 'Smoker',
-            'occasional': 'Occasional'
         }
     };
     

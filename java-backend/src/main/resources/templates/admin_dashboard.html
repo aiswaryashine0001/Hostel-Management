@@ -217,7 +217,7 @@
                                         <li>Sleep and wake time compatibility</li>
                                         <li>Study habits and noise tolerance</li>
                                         <li>Cleanliness and social preferences</li>
-                                        <li>Smoking and lifestyle compatibility</li>
+                                        <li>Temperature and lifestyle compatibility</li>
                                         <li>Shared interests and hobbies</li>
                                     </ul>
                                 </div>
@@ -291,6 +291,7 @@
 <script>
 // Load data on page load
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Admin dashboard loaded, initializing...');
     loadDashboardStats();
     refreshStudents();
     refreshRooms();
@@ -320,11 +321,19 @@ async function loadDashboardStats() {
 }
 
 async function refreshStudents() {
+    const tbody = document.getElementById('studentsTableBody');
+    
     try {
+        console.log('Fetching students from /api/students...');
         const response = await fetch('/api/students');
-        const data = await response.json();
+        console.log('Response status:', response.status);
         
-        const tbody = document.getElementById('studentsTableBody');
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Students data:', data);
         
         if (data.students && data.students.length > 0) {
             tbody.innerHTML = data.students.map(student => `
@@ -353,11 +362,19 @@ async function refreshStudents() {
                 </tr>
             `).join('');
         } else {
+            console.log('No students found in response');
             tbody.innerHTML = '<tr><td colspan="7" class="text-center">No students found</td></tr>';
         }
     } catch (error) {
         console.error('Error loading students:', error);
-        showAlert('Error loading students', 'danger');
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error loading students: ${error.message}</td></tr>`;
+        
+        // Try to show alert, fallback to console if not available
+        if (typeof showAlert === 'function') {
+            showAlert(`Error loading students: ${error.message}`, 'danger');
+        } else {
+            console.error('showAlert function not available');
+        }
     }
 }
 
