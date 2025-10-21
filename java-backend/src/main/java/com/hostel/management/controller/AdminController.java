@@ -115,6 +115,60 @@ public class AdminController {
     }
 
     /**
+     * Debug allocation readiness
+     */
+    @GetMapping("/allocation_debug")
+    public ResponseEntity<Map<String, Object>> allocationDebug() {
+        Map<String, Object> response = new HashMap<>();
+        
+        try {
+            // Check students with preferences but no allocation
+            List<Student> studentsWithPrefs = studentRepository.findStudentsWithPreferencesButNoAllocation();
+            List<Room> availableRooms = roomRepository.findAvailableRooms();
+            List<Student> allStudents = studentRepository.findAll();
+            List<Room> allRooms = roomRepository.findAll();
+            
+            response.put("total_students", allStudents.size());
+            response.put("students_with_preferences_no_allocation", studentsWithPrefs.size());
+            response.put("total_rooms", allRooms.size());
+            response.put("available_rooms", availableRooms.size());
+            
+            // List students with preferences
+            List<Map<String, Object>> studentDetails = new ArrayList<>();
+            for (Student s : allStudents) {
+                Map<String, Object> studentInfo = new HashMap<>();
+                studentInfo.put("student_id", s.getStudentId());
+                studentInfo.put("name", s.getName());
+                studentInfo.put("has_preferences", s.getPreferences() != null);
+                studentInfo.put("has_allocation", s.getRoomAllocation() != null);
+                studentDetails.add(studentInfo);
+            }
+            response.put("student_details", studentDetails);
+            
+            // List room details
+            List<Map<String, Object>> roomDetails = new ArrayList<>();
+            for (Room r : allRooms) {
+                Map<String, Object> roomInfo = new HashMap<>();
+                roomInfo.put("room_number", r.getRoomNumber());
+                roomInfo.put("capacity", r.getCapacity());
+                roomInfo.put("occupied", r.getOccupied());
+                roomInfo.put("status", r.getStatus());
+                roomInfo.put("is_available", r.getOccupied() < r.getCapacity() && "available".equals(r.getStatus()));
+                roomDetails.add(roomInfo);
+            }
+            response.put("room_details", roomDetails);
+            
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    /**
      * Database health check endpoint
      */
     @GetMapping("/health")

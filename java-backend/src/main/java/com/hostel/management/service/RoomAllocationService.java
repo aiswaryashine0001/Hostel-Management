@@ -49,11 +49,54 @@ public class RoomAllocationService {
      */
     @Transactional
     public AllocationResult allocateRooms() {
-        List<Student> unallocatedStudents = studentRepository.findStudentsWithPreferencesButNoAllocation();
+        // Debug: Check total students and preferences
+        List<Student> allStudents = studentRepository.findAll();
+        System.out.println("DEBUG: Total students in database: " + allStudents.size());
+        
+        for (Student s : allStudents) {
+            System.out.println("Student ID: " + s.getStudentId() + 
+                             ", Name: " + s.getName() + 
+                             ", Has Preferences: " + (s.getPreferences() != null) +
+                             ", Has Room Allocation: " + (s.getRoomAllocation() != null));
+        }
+        
+        // Get all students and filter manually to avoid JPQL issues
+        List<Student> allStudents = studentRepository.findAll();
+        List<Student> unallocatedStudents = new ArrayList<>();
+        
+        for (Student student : allStudents) {
+            if (student.getPreferences() != null && student.getRoomAllocation() == null) {
+                unallocatedStudents.add(student);
+                System.out.println("DEBUG: Student " + student.getStudentId() + " has preferences and no allocation - eligible");
+            } else {
+                System.out.println("DEBUG: Student " + student.getStudentId() + 
+                                 " - Has preferences: " + (student.getPreferences() != null) + 
+                                 ", Has allocation: " + (student.getRoomAllocation() != null));
+            }
+        }
+        
+        System.out.println("DEBUG: Found " + unallocatedStudents.size() + " students with preferences but no allocation");
+        
         List<Room> availableRooms = roomRepository.findAvailableRooms();
+        System.out.println("DEBUG: Available rooms: " + availableRooms.size());
+        
+        // Check all rooms for debugging
+        List<Room> allRooms = roomRepository.findAll();
+        System.out.println("DEBUG: Total rooms in database: " + allRooms.size());
+        for (Room room : allRooms) {
+            System.out.println("Room " + room.getRoomNumber() + 
+                             " - Capacity: " + room.getCapacity() + 
+                             ", Occupied: " + room.getOccupied() + 
+                             ", Status: " + room.getStatus() +
+                             ", Available: " + (room.getOccupied() < room.getCapacity() && "available".equals(room.getStatus())));
+        }
         
         if (unallocatedStudents.isEmpty()) {
-            return new AllocationResult(0, 0, new ArrayList<>(), "No students to allocate");
+            return new AllocationResult(0, 0, new ArrayList<>(), "No students with preferences to allocate");
+        }
+        
+        if (availableRooms.isEmpty()) {
+            return new AllocationResult(0, unallocatedStudents.size(), new ArrayList<>(), "No available rooms");
         }
         
         if (availableRooms.isEmpty()) {
@@ -134,6 +177,7 @@ public class RoomAllocationService {
         
         if (currentAllocations.isEmpty()) {
             // Empty room - good default score
+            System.out.println("DEBUG: Room " + room.getRoomNumber() + " is empty, score: 75.0");
             return 75.0;
         }
         
@@ -160,7 +204,8 @@ public class RoomAllocationService {
      */
     public double calculateCompatibilityScore(StudentPreferences prefs1, StudentPreferences prefs2) {
         if (prefs1 == null || prefs2 == null) {
-            return 50.0; // Default score
+            System.out.println("DEBUG: One or both students have no preferences, using default score 60.0");
+            return 60.0; // Default score for students without preferences
         }
         
         double totalScore = 0.0;
