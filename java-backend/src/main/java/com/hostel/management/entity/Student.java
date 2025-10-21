@@ -51,7 +51,7 @@ public class Student {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private StudentPreferences preferences;
     

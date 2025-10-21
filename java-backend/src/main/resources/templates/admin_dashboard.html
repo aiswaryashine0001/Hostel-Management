@@ -284,6 +284,30 @@
             </div>
         </div>
     </div>
+
+    <!-- View Preferences Modal -->
+    <div class="modal fade" id="preferencesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Student Preferences</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="preferencesContent">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -356,7 +380,7 @@ async function refreshStudents() {
                     <td>${student.year || 'N/A'}</td>
                     <td>
                         ${student.preferences ? 
-                            '<span class="badge bg-success">Completed</span>' : 
+                            '<button class="btn btn-sm btn-success" onclick="viewPreferences(' + student.id + ')"><i class="fas fa-eye"></i> View</button>' : 
                             '<span class="badge bg-warning">Pending</span>'
                         }
                     </td>
@@ -537,6 +561,62 @@ function showAllocationResults(results) {
     
     contentDiv.innerHTML = html;
     resultsDiv.style.display = 'block';
+}
+
+async function viewPreferences(studentId) {
+    try {
+        // Find the student data from the cached students
+        const response = await fetch('/api/students');
+        const data = await response.json();
+        const student = data.students.find(s => s.id === studentId);
+        
+        if (!student || !student.preferences) {
+            showAlert('Student preferences not found!', 'warning');
+            return;
+        }
+        
+        const preferences = student.preferences;
+        const content = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-primary">Sleep & Study Habits</h6>
+                    <p><strong>Sleep Time:</strong> ${preferences.sleepTime || 'Not specified'}</p>
+                    <p><strong>Wake Time:</strong> ${preferences.wakeTime || 'Not specified'}</p>
+                    <p><strong>Study Preference:</strong> ${preferences.studyPreference || 'Not specified'}</p>
+                    <p><strong>Noise Tolerance:</strong> ${preferences.noiseTolerance || 'Not specified'}</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-primary">Lifestyle Preferences</h6>
+                    <p><strong>Cleanliness Level:</strong> ${preferences.cleanlinessLevel || 'Not specified'}</p>
+                    <p><strong>Social Preference:</strong> ${preferences.socialPreference || 'Not specified'}</p>
+                    <p><strong>Music Preference:</strong> ${preferences.musicPreference || 'Not specified'}</p>
+                    <p><strong>Visitor Frequency:</strong> ${preferences.visitorFrequency || 'Not specified'}</p>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <h6 class="text-primary">Environmental Preferences</h6>
+                    <p><strong>Temperature Preference:</strong> ${preferences.temperaturePreference || 'Not specified'}</p>
+                    <p><strong>Dietary Preferences:</strong> ${preferences.dietaryPreferences || 'Not specified'}</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-primary">Personal Information</h6>
+                    <p><strong>Interests:</strong> ${preferences.interests || 'Not specified'}</p>
+                    <p><strong>Additional Notes:</strong> ${preferences.additionalNotes || 'Not specified'}</p>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('preferencesContent').innerHTML = content;
+        
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('preferencesModal'));
+        modal.show();
+        
+    } catch (error) {
+        console.error('Error loading preferences:', error);
+        showAlert('Error loading preferences: ' + error.message, 'danger');
+    }
 }
 
 function viewStudent(studentId) {

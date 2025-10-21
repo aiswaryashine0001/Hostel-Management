@@ -16,6 +16,7 @@ public class StudentDto {
     private Integer year;
     private String gender;
     private LocalDateTime createdAt;
+    private PreferencesDto preferences;
 
     // Default constructor
     public StudentDto() {}
@@ -31,6 +32,7 @@ public class StudentDto {
         this.year = student.getYear();
         this.gender = student.getGender();
         this.createdAt = student.getCreatedAt();
+        this.preferences = student.getPreferences() != null ? new PreferencesDto(student.getPreferences()) : null;
     }
 
     // Getters and setters
@@ -104,5 +106,13 @@ public class StudentDto {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public PreferencesDto getPreferences() {
+        return preferences;
+    }
+
+    public void setPreferences(PreferencesDto preferences) {
+        this.preferences = preferences;
     }
 }
